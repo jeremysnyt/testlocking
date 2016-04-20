@@ -3,6 +3,7 @@ use strict;
 #use warnings FATAL => 'all';
 use Date::Calc qw(Add_Delta_DHMS);
 use Fcntl qw(:flock SEEK_END);
+use IO::File;
 
 my $ENABLE_FILE_LOCKING;
 my $ENABLE_FILE_LOCK_LOGGING;
