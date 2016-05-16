@@ -5,6 +5,7 @@ use Date::Calc qw(Add_Delta_DHMS);
 use Fcntl qw(:flock SEEK_END);
 use IO::File;
 use File::Path qw( make_path );
+use Getopt::Long;
 
 
 my $ENABLE_FILE_LOCKING;
@@ -20,9 +21,18 @@ my $error            = 0;
 my $LOCK_FAILURE_STATUS	= 'ALREADY RUNNING';
 my $wait_intervals  = 60;
 
+my ( $test_folder_root );
+GetOptions(
+    "test_folder_root=s"    => \$test_folder_root,
+);
+if ( not -d "/$test_folder_root" ) {
+    die "Useage ERROR - test_folder_root: $test_folder_root does not exist";
+}
 
 # set up lock files so that we can singleton this process
-my $test_folder = '/data/feeds/outgoing/test/';
+my $test_folder = '';
+$test_folder    .= "/$test_folder_root" if $test_folder_root;
+$test_folder    .= '/data/feeds/outgoing/test';
 my $lock_file	= "$test_folder/feeds_file_lock";
 
 # make sure that we have the test path
