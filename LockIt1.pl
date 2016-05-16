@@ -4,6 +4,8 @@ use strict;
 use Date::Calc qw(Add_Delta_DHMS);
 use Fcntl qw(:flock SEEK_END);
 use IO::File;
+use File::Path qw( make_path );
+
 
 my $ENABLE_FILE_LOCKING;
 my $ENABLE_FILE_LOCK_LOGGING;
@@ -20,8 +22,14 @@ my $wait_intervals  = 60;
 
 
 # set up lock files so that we can singleton this process
-my $lock_file	= '/data/feeds/outgoing/test/feeds_file_lock';
+my $test_folder = '/data/feeds/outgoing/test/';
+my $lock_file	= "$test_folder/feeds_file_lock";
 
+# make sure that we have the test path
+if ( not -d $test_folder ) {
+    print "Creating test folder, $test_folder - does not yet exist\n";
+    make_path( "$test_folder" );
+}
 
 my $return_code;
 my $err_txt;
